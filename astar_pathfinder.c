@@ -24,16 +24,40 @@ struct path_node_t *new_path_node(struct path_node_t *parent, point_t point, int
     return result;
 }
 
+struct path_node_t *new_path_node_init(struct path_node_t *parent, point_t point,point_t to) {
+    struct path_node_t *node = new_path_node(parent, point, 0, 0, 0);
+    node->H = path_node_H(node, to);
+    node->G = path_node_G(node);
+    node->F = path_node_F(node);
+    return node;
+}
+
 point_t *get_adjacents(point_t point) {
-    point_t adjacents[] = {
-        {point.x +1, point.y}, 
-        {point.x +1, point.y + 1},
-        {point.x , point.y + 1},
-        {point.x -1, point.y +1},
-        {point.x -1, point.y},
-        {point.x -1, point.y -1},
-        {point.x , point.y -1},
-        {point.x +1, point.y -1}};
+    point_t *adjacents = (point_t *)malloc(sizeof(point_t) * 9);
+    adjacents[0].x = point.x + 1;
+    adjacents[0].y = point.y;
+
+    adjacents[1].x = point.x + 1;
+    adjacents[1].y = point.y + 1;
+
+    adjacents[2].x = point.x;
+    adjacents[2].y = point.y + 1;
+
+    adjacents[3].x = point.x - 1;
+    adjacents[3].y = point.y + 1;
+
+    adjacents[4].x = point.x - 1;
+    adjacents[4].y = point.y;
+
+    adjacents[5].x = point.x - 1;
+    adjacents[5].y = point.y - 1;
+
+    adjacents[6].x = point.x;
+    adjacents[6].y = point.y - 1;
+
+    adjacents[7].x = point.x + 1;
+    adjacents[7].y = point.y - 1;
+    
     return adjacents;
 }
 
@@ -47,81 +71,6 @@ int path_node_equals(const void *e1, const void *e2) {
     return point_equals(n1->point, n2->point);
 } 
 
-list_t *get_path(field_t *field, point_t from, point_t to) {
-    list_t *open = list_new(path_node_equals);
-    list_t *closed = list_new(path_node_equals);
-    
-    struct path_node_t *from_node = new_path_node(NULL, from, 0, 0, 0); 
-    list_add(open, from_node);
-
-    struct path_node_t *target_node = NULL;
-    int cc = 0;
-    while (TRUE) {
-        printf("%d\n", list_size(open));
-        if (open->first == NULL) {
-            return NULL;
-        }
-        int min = INT_MAX_VALUE;
-        struct path_node_t *min_node = NULL;
-        
-        {
-            struct path_node_t *node;
-            LIST_FOREACH_START(open, node)
-                if (min_node == NULL || node->F < min) {
-                    min = node->F;
-                    min_node = node;
-                }
-            LIST_FOREACH_END(open);
-        }
-        
-        if (point_equals(min_node->point, to)) {
-            target_node = min_node;
-            break;
-        }
-
-        point_t *adjacents = get_adjacents(min_node->point);
-
-        for (int i = 0; i < 8; i++) {
-            point_t point = adjacents[i];
-            // I do not consider the end point to be occupied, so I can move towards it
-            if (field_contains(field, point) && (point_equals(point, to) || !field_is_occupied(field, point))) {
-                struct path_node_t *node = new_path_node(min_node, point, 0, 0, 0);
-                node->H = path_node_H(node);
-                node->G = path_node_G(node);
-                node->F = path_node_F(node);
-                if (!list_contains(closed, node)) {
-                    if (!list_contains(open, node)) {
-                        list_add(open, node);
-                    } else {
-/*                        int gToMin = minNode.G(node);
-                        if (gToMin < node.G()) {
-                            node.setParent(minNode);
-                        }
-*/
-                    }
-                }
-            }
-        }
-        list_remove(open, min_node);
-        list_add(closed, min_node);
-            
-    }
-    
-    list_t *result = list_new(NULL);
-    
-    while (target_node->parent != NULL) {
-        /* the path can contains occupied points. Normally it can be only the end point */ 
-        if (!field_is_occupied(field, target_node->point)) {
-            list_add(result, &target_node->point);
-        }
-        target_node = target_node->parent;
-    }
-    
-    list_clear(open);
-    list_clear(closed);    
-    
-    return result;
-}
 
 int path_node_H(struct path_node_t *node, point_t to) {
     return (abs(to.x - node->point.x) + abs(to.y - node->point.y)) * 10;
@@ -147,3 +96,83 @@ int path_node_G_vs(struct path_node_t *node, struct path_node_t *vs) {
 int path_node_G(struct path_node_t *node) {
     return path_node_G_vs(node, node->parent); 
 }
+
+list_t *get_path(field_t *field, point_t from, point_t to) {
+    list_t *open = list_new(path_node_equals);
+    list_t *closed = list_new(path_node_equals);
+    
+    struct path_node_t *from_node = new_path_node_init(NULL, from, to); 
+    list_add(open, from_node);
+
+    struct path_node_t *target_node = NULL;
+    
+    while (TRUE) {
+        printf("%d\n", list_size(open));
+        if (open->first == NULL) {
+            return NULL;
+        }
+        int min = INT_MAX_VALUE;
+        struct path_node_t *min_node = NULL;
+        
+        {
+            struct path_node_t *node;
+            LIST_FOREACH_START(open, node)
+                printf("point=%d,%d=%d\n", node->point.x, node->point.y, node->F);
+                if (min_node == NULL || node->F < min) {
+                    min = node->F;
+                    min_node = node;
+                }
+            LIST_FOREACH_END(open);
+        }
+        
+        if (point_equals(min_node->point, to)) {
+            target_node = min_node;
+            break;
+        }
+
+        point_t *adjacents = get_adjacents(min_node->point);
+
+        for (int i = 0; i < 8; i++) {
+            point_t point = adjacents[i];
+            printf("adjacent=%d,%d\n", point.x, point.y);
+            // I do not consider the end point to be occupied, so I can move towards it
+            if (field_contains(field, point) && (point_equals(point, to) || !field_is_occupied(field, point))) {
+                struct path_node_t *node = new_path_node(min_node, point, 0, 0, 0);
+                node->H = path_node_H(node, to);
+                node->G = path_node_G(node);
+                node->F = path_node_F(node);
+                if (!list_contains(closed, node)) {
+                    if (!list_contains(open, node)) {
+                        list_add(open, node);
+                    } else {
+/*                        int gToMin = minNode.G(node);
+                        if (gToMin < node.G()) {
+                            node.setParent(minNode);
+                        }
+*/
+                    }
+                }
+            }
+        }
+        
+        list_remove(open, min_node);
+        list_add(closed, min_node);
+            
+    }
+    
+    list_t *result = list_new(NULL);
+    
+    while (target_node->parent != NULL) {
+        /* the path can contains occupied points. Normally it can be only the end point */ 
+        if (!field_is_occupied(field, target_node->point)) {
+            list_add(result, &target_node->point);
+        }
+        target_node = target_node->parent;
+    }
+    
+    list_clear(open);
+    list_clear(closed);    
+    
+    return result;
+}
+
