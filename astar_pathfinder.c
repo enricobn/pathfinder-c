@@ -41,9 +41,15 @@ int point_equals(point_t a, point_t b) {
     return a.x == b.x && a.y == b.y;
 }
 
+int path_node_equals(const void *e1, const void *e2) {
+    struct path_node_t *n1 = (struct path_node_t *)e1;
+    struct path_node_t *n2 = (struct path_node_t *)e2;
+    return point_equals(n1->point, n2->point);
+} 
+
 list_t *get_path(field_t *field, point_t from, point_t to) {
-    list_t *open = list_new(NULL);
-    list_t *closed = list_new(NULL);
+    list_t *open = list_new(path_node_equals);
+    list_t *closed = list_new(path_node_equals);
     
     struct path_node_t *from_node = new_path_node(NULL, from, 0, 0, 0); 
     list_add(open, from_node);

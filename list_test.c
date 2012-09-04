@@ -49,7 +49,6 @@ int main(int argc, char** argv) {
     
     assert(!list_contains(l, &a));
 
-
     list_clear(l);
     
     assert(!list_contains(l, &a));
