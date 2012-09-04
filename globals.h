@@ -5,6 +5,8 @@
 #ifndef GLOBALS_H_
 #define GLOBALS_H_
 
+typedef enum {FALSE, TRUE} boolean;
+
 #define ERROR(...) fprintf(stderr, __VA_ARGS__)
 
 #define STRUCT_NEW(STRUCT) (struct STRUCT *) malloc(sizeof(struct STRUCT))

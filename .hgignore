@@ -5,4 +5,5 @@ syntax: glob
 *.o
 *.i
 *.a
+*.s
 *~

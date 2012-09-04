@@ -1,8 +1,6 @@
 #include <stdlib.h>
+#include "globals.h"
 #include "list.h"
-
-#define ERROR(...) fprintf(stderr, __VA_ARGS__)
-typedef enum {FALSE, TRUE} boolean;
 
 list_t *list_new(list_equals equals) {
     list_t *new = (list_t *) malloc(sizeof(list_t));
