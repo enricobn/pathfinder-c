@@ -29,6 +29,8 @@ int list_contains(list_t *list, const void *element);
 
 void list_clear(list_t *list);
 
+int list_remove(list_t *list, const void *element);
+
 #define LIST_FOREACH_START(LIST, ELEMENT) \
     for (LIST->actual_cursor[++ LIST->actual_cursor_number] = LIST->first; \
                 LIST->actual_cursor[ LIST->actual_cursor_number] != NULL; \

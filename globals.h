@@ -14,4 +14,7 @@ typedef enum {FALSE, TRUE} boolean;
 //#define NEW(VAR) (__typeof__( VAR )) malloc(sizeof(__typeof__( VAR )));
 #define NEW(TYPE) (TYPE) malloc(sizeof(TYPE));
 
+#define INT_MAX_VALUE 2147483647
+#define INT_MIN_VALUE (–2147483647 – 1)
+
 #endif

@@ -64,3 +64,25 @@ void list_clear(list_t *list) {
         free(tmp); 
     }
 }
+
+int list_remove(list_t *list, const void *element) {
+    struct cursor *cur = list->first;
+    struct cursor *prev = list->first;
+    for (cur = list->first; cur != NULL; cur = cur->next) {
+        if ((list->equals == NULL && element == cur->current) 
+                || list->equals(element, cur->current)) {
+            if (cur == list->first) {
+                struct cursor *tmp = list->first;
+                list->first = list->first->next;
+                free(tmp);
+            } else {
+                struct cursor *tmp = cur;
+                prev->next = cur->next;
+                free(tmp);
+            }
+            return TRUE;
+        }
+        prev = cur;
+    }
+    return FALSE;
+}

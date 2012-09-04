@@ -38,6 +38,15 @@ int main(int argc, char** argv) {
     assert(list_contains(l, &c));
     assert(!list_contains(l, &d));
 
+    assert(list_remove(l, &b));
+    
+    assert(!list_contains(l, &b));
+
+    assert(list_remove(l, &a));
+    
+    assert(!list_contains(l, &a));
+
+
     list_clear(l);
     
     assert(!list_contains(l, &a));
