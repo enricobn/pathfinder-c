@@ -55,8 +55,9 @@ list_t *get_path(field_t *field, point_t from, point_t to) {
     list_add(open, from_node);
 
     struct path_node_t *target_node = NULL;
-    
+    int cc = 0;
     while (TRUE) {
+        printf("%d\n", list_size(open));
         if (open->first == NULL) {
             return NULL;
         }

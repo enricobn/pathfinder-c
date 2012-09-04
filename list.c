@@ -61,7 +61,7 @@ void list_clear(list_t *list) {
         */
         struct cursor *tmp = cur;
         cur = cur->next;
-        free(tmp); 
+        free(tmp);
     }
 }
 
@@ -85,4 +85,13 @@ int list_remove(list_t *list, const void *element) {
         prev = cur;
     }
     return FALSE;
+}
+
+int list_size(list_t *list) {
+    int count = 0;
+    void *element;
+    LIST_FOREACH_START(list, element)
+        count++;
+    LIST_FOREACH_END(list)
+    return count;
 }
