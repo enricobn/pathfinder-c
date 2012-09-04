@@ -41,3 +41,24 @@ list_t *get_path(field_t field, point_t from, point_t to) {
 int path_node_H(struct path_node_t *node, point_t to) {
     return (abs(to.x - node->point.x) + abs(to.y - node->point.y)) * 10;
 }
+
+int path_node_F(struct path_node_t *node) {
+    return node->H + node->G;
+}
+
+int path_node_G_vs(struct path_node_t *node, struct path_node_t *vs) {
+    if (vs == NULL) {
+        return 0;
+    }
+    int g = node->G;
+    if (node->point.x == vs->point.x || node->point.y == vs->point.y) {
+        g += 10;
+    } else {
+        g += 14;
+    }
+    return g;
+}
+
+int path_node_G(struct path_node_t *node) {
+    return path_node_G_vs(node, node->parent); 
+}
