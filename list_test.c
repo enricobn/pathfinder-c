@@ -26,10 +26,13 @@ int main(int argc, char** argv) {
     cur = cur->next;    
     assert(*((int *)cur->current) == 30);
 
+    int count = 0;
     int *element;
     LIST_FOREACH_START(l, element)
-        printf("%d\n", *element);
+        count++;
     LIST_FOREACH_END(l)
+
+    assert(count == 3);
 
     int d = 40;
 

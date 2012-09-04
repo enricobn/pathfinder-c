@@ -99,11 +99,16 @@ list_t *get_path(field_t *field, point_t from, point_t to) {
         list_add(closed, min_node);
             
     }
-
-
-
     
     list_t *result = list_new(NULL);
+    
+    while (target_node->parent != NULL) {
+        /* the path can contains occupied points. Normally it can be only the end point */ 
+        if (!field_is_occupied(field, target_node->point)) {
+            list_add(result, &target_node->point);
+        }
+        target_node = target_node->parent;
+    }
     
     list_clear(open);
     list_clear(closed);    
