@@ -1,11 +1,11 @@
 #CPPFLAGS = -lglut -lGLU
 all : path_example.bin list_test.bin field_test.bin move_example.bin
 
-move_example.bin : move_example.o astar_pathfinder.o cpathfinder.h list.o field.o
+move_example.bin : move_example.o astar_pathfinder.o list.o field.o
 	@echo 'Building $@'
 	cc -g -lglut -lGLU $^ -o $@
 
-path_example.bin : path_example.o astar_pathfinder.o cpathfinder.h list.o field.o
+path_example.bin : path_example.o astar_pathfinder.o list.o field.o
 	@echo 'Building $@'
 	cc -g -lglut -lGLU $^ -o $@
 

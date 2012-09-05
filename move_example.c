@@ -2,7 +2,9 @@
  * move_example.c
  * This is a path finding example using ASearch
  */
+#include <unistd.h>
 #include <GL/glut.h>
+#include "globals.h"
 #include "list.h"
 #include "field.h"
 #include "astar_pathfinder.h"
@@ -76,21 +78,9 @@ void display(void)
     {
         int i;
         for (i = 0; i < moving_shapes_count; i++) {
-            list_t *path = get_path(field, moving_shapes[i].start, moving_shapes[i].end);
-            if (path == NULL) {
-                ERROR("No path found!\n");
-                exit(1);
-            }
-            point_t *point;
-            LIST_FOREACH_START(path, point)
-               glColor3f (0.0, 1.0, 0.0);
-        //       printf("%d %d %d %d\n", point->x, point->y, point->x + 1, point->y +1);
-               rectangle_t r = {{point->x, point->y}, {1, 1}};
-               draw_rectangle(r);
-               //glRectf((float)point->x, (float)point->y, (float)point->x + 1, (float)point->y +1);
-            LIST_FOREACH_END(path)
-            
-            list_free(path, TRUE);
+            glColor3f(0.0, 1.0, 0.0);
+            rectangle_t r = {{moving_shapes[i].start.x, moving_shapes[i].start.y}, {1, 1}};
+            draw_rectangle(r);
         }
     }
     
@@ -100,6 +90,39 @@ void display(void)
  * start processing buffered OpenGL routines 
  */
    glFlush ();
+/*   usleep(100);*/
+   glutSwapBuffers();
+}
+
+void animate() {
+    int i;
+    for (i = 0; i < moving_shapes_count; i++) {
+        if (point_equals(moving_shapes[i].start, moving_shapes[i].end)) {
+            continue;
+        }
+        list_t *path = get_path(field, moving_shapes[i].start, moving_shapes[i].end);
+        if (path == NULL) {
+            printf("empty path\n");
+            continue;
+/*            ERROR("No path found!\n");
+            exit(1);
+*/
+        }
+        
+        point_t point = *((point_t *)path->last->current);
+        
+        moving_shapes[i].start.x = point.x;
+        moving_shapes[i].start.y = point.y;
+                
+        list_free(path, TRUE);
+    }
+
+
+/* 
+    Normally openGL doesn't continuously draw frames. It puts one in place and waits for you to tell him what to do next.
+     Calling glutPostRedisplay() forces a redraw with the new angle
+ */
+    glutPostRedisplay();
 }
 
 void init (void) 
@@ -124,12 +147,13 @@ int main(int argc, char** argv)
 {
     field_init();
     glutInit(&argc, argv);
-    glutInitDisplayMode (GLUT_SINGLE | GLUT_RGB);
+    glutInitDisplayMode (GLUT_DOUBLE | GLUT_RGB);
     glutInitWindowSize (800, 600); 
     glutInitWindowPosition (100, 100);
     glutCreateWindow ("Path example");
     init ();
-    glutDisplayFunc(display); 
+    glutDisplayFunc(display);
+    glutIdleFunc(animate);
     glutMainLoop();
     return 0;   /* ANSI C requires main to return int. */
 }

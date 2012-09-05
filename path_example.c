@@ -3,6 +3,7 @@
  * This is a path finding example using ASearch
  */
 #include <GL/glut.h>
+#include "globals.h"
 #include "list.h"
 #include "field.h"
 #include "astar_pathfinder.h"

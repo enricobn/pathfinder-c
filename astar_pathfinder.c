@@ -1,7 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 #include "globals.h"
-#include "cpathfinder.h"
 #include "astar_pathfinder.h"
 #include "list.h"
 #include "field.h"
@@ -55,10 +55,6 @@ point_t *get_adjacents(point_t point) {
     adjacents_tmp[7].y = point.y - 1;
     
     return adjacents_tmp;
-}
-
-int point_equals(point_t a, point_t b) {
-    return a.x == b.x && a.y == b.y;
 }
 
 int path_node_equals(const void *e1, const void *e2) {
@@ -153,6 +149,7 @@ list_t *get_path(field_t *field, point_t from, point_t to) {
 /*                        int gToMin = minNode.G(node);
                         if (gToMin < node.G()) {
                             node.setParent(minNode);
+                            // recalculate G, F
                         }
 */
                         free(node);
