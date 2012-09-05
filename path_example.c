@@ -63,7 +63,7 @@ void display(void)
     point_t *point;
     LIST_FOREACH_START(path, point)
        glColor3f (0.0, 1.0, 0.0);
-       printf("%d %d %d %d", point->x, point->y, point->x + 1, point->y +1);
+/*       printf("%d %d %d %d\n", point->x, point->y, point->x + 1, point->y +1);*/
        rectangle_t r = {{point->x, point->y}, {1, 1}};
        draw_rectangle(r);
        //glRectf((float)point->x, (float)point->y, (float)point->x + 1, (float)point->y +1);

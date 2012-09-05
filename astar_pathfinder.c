@@ -112,7 +112,7 @@ list_t *get_path(field_t *field, point_t from, point_t to) {
     struct path_node_t *target_node = NULL;
     
     while (TRUE) {
-        printf("%d\n", list_size(open));
+/*        printf("%d\n", list_size(open));*/
         if (open->first == NULL) {
             return NULL;
         }
@@ -122,7 +122,7 @@ list_t *get_path(field_t *field, point_t from, point_t to) {
         {
             struct path_node_t *node;
             LIST_FOREACH_START(open, node)
-                printf("point=%d,%d=%d\n", node->point.x, node->point.y, node->F);
+/*                printf("point=%d,%d=%d\n", node->point.x, node->point.y, node->F);*/
                 if (min_node == NULL || node->F < min) {
                     min = node->F;
                     min_node = node;
@@ -139,7 +139,7 @@ list_t *get_path(field_t *field, point_t from, point_t to) {
 
         for (int i = 0; i < 8; i++) {
             point_t point = adjacents[i];
-            printf("adjacent=%d,%d\n", point.x, point.y);
+/*            printf("adjacent=%d,%d\n", point.x, point.y);*/
             // I do not consider the end point to be occupied, so I can move towards it
             if (field_contains(field, point) && (point_equals(point, to) || !field_is_occupied(field, point))) {
                 struct path_node_t *node = new_path_node(min_node, point, 0, 0, 0);
@@ -157,11 +157,14 @@ list_t *get_path(field_t *field, point_t from, point_t to) {
 */
                     }
                 }
+/*
+            } else {
+                printf("Excluded %d, %d, fc=%d, oc=%d\n", point.x, point.y, field_contains(field, point), field_is_occupied(field, point));
+*/
             }
         }
         
         list_remove(open, min_node);
-        free(min_node);
         list_add(closed, min_node);
     }
     
