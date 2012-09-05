@@ -50,17 +50,23 @@ void field_init() {
     
     list_add(field->shapes, rectangle_new(40, 60, 20, 20));
 
-    list_add(field->shapes, rectangle_new(80, 80, 10, 10));
+    list_add(field->shapes, rectangle_new(75, 75, 10, 10));
     
-    moving_shapes = (moving_shape_t *) malloc(sizeof(moving_shape_t) * moving_shapes_count);    
+    moving_shapes = (moving_shape_t *) malloc(sizeof(moving_shape_t) * moving_shapes_count * 2);    
     
     int i;
     for (i = 0; i < moving_shapes_count; i++) {
-        moving_shapes[i].start.x = 0;
-        moving_shapes[i].start.y = moving_shapes_count -i;
+        moving_shapes[2 * i].start.x = 0;
+        moving_shapes[2 * i].start.y = moving_shapes_count -i;
          
-        moving_shapes[i].end.x = 90;
-        moving_shapes[i].end.y = 99 -i;
+        moving_shapes[2 * i].end.x = 90;
+        moving_shapes[2 * i].end.y = 99 -i;
+
+        moving_shapes[2 * i + 1].end.x = 0;
+        moving_shapes[2 * i + 1].end.y = moving_shapes_count -i;
+         
+        moving_shapes[2 * i + 1].start.x = 90;
+        moving_shapes[2 * i + 1].start.y = 99 -i;
     }    
 }
 
@@ -77,7 +83,7 @@ void display(void)
 
     {
         int i;
-        for (i = 0; i < moving_shapes_count; i++) {
+        for (i = 0; i < moving_shapes_count * 2; i++) {
             glColor3f(0.0, 1.0, 0.0);
             rectangle_t r = {{moving_shapes[i].start.x, moving_shapes[i].start.y}, {1, 1}};
             draw_rectangle(r);
@@ -96,7 +102,7 @@ void display(void)
 
 void animate() {
     int i;
-    for (i = 0; i < moving_shapes_count; i++) {
+    for (i = 0; i < moving_shapes_count * 2; i++) {
         if (point_equals(moving_shapes[i].start, moving_shapes[i].end)) {
             continue;
         }
