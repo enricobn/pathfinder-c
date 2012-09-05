@@ -50,24 +50,22 @@ int list_contains(list_t *list, const void *element) {
     return FALSE;
 }
 
-void list_clear(list_t *list) {
+void list_clear(list_t *list, int deep) {
     struct cursor *cur = list->first;
     list->first = NULL;
     list->last = NULL;
     while (cur != NULL) {
-/*
-        if (cur->current != NULL) {
+        if (deep && cur->current != NULL) {
             free(cur->current);
         }
-*/
         struct cursor *tmp = cur;
         cur = cur->next;
         free(tmp);
     }
 }
 
-void list_free(list_t *list) {
-    list_clear(list);
+void list_free(list_t *list, int deep) {
+    list_clear(list, deep);
     free(list);
     list = NULL;
 }

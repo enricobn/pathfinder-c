@@ -1,4 +1,5 @@
 #include <assert.h>
+#include "globals.h"
 #include "list.h"
 
 int equals(const void *e1, const void *e2) {
@@ -49,7 +50,7 @@ int main(int argc, char** argv) {
     
     assert(!list_contains(l, &a));
 
-    list_clear(l);
+    list_clear(l, FALSE);
     
     assert(!list_contains(l, &a));
 

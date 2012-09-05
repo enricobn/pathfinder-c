@@ -27,13 +27,13 @@ void list_add(list_t *list, const void *element);
 
 int list_contains(list_t *list, const void *element);
 
-void list_clear(list_t *list);
+void list_clear(list_t *list, int deep);
 
 int list_remove(list_t *list, const void *element);
 
 int list_size(list_t *list);
 
-void list_free(list_t *list);
+void list_free(list_t *list, int deep);
 
 #define LIST_FOREACH_START(LIST, ELEMENT) \
     LIST->actual_cursor_number++;\

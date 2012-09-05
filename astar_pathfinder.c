@@ -178,8 +178,8 @@ list_t *get_path(field_t *field, point_t from, point_t to) {
         target_node = target_node->parent;
     }
     
-    list_free(open);
-    list_free(closed);
+    list_free(open, FALSE);
+    list_free(closed, FALSE);
     
     return result;
 }
