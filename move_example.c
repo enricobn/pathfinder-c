@@ -18,7 +18,7 @@ void draw_rectangle(rectangle_t rectangle) {
 }
 
 typedef struct {
-    point_t start;
+    rectangle_t *shape;
     point_t end;
 } moving_shape_t;
 
@@ -56,18 +56,18 @@ void field_init() {
     
     int i;
     for (i = 0; i < moving_shapes_count; i++) {
-        moving_shapes[2 * i].start.x = 0;
-        moving_shapes[2 * i].start.y = moving_shapes_count -i;
-         
+        rectangle_t *p1 = rectangle_new(0, moving_shapes_count -i, 1, 1);
+        moving_shapes[2 * i].shape = p1;
         moving_shapes[2 * i].end.x = 90;
         moving_shapes[2 * i].end.y = 99 -i;
+        list_add(field->shapes, p1);
 
+        rectangle_t *p2 = rectangle_new(99, 99 -i, 1, 1);
+        moving_shapes[2 * i +1].shape = p2;
         moving_shapes[2 * i + 1].end.x = 0;
         moving_shapes[2 * i + 1].end.y = moving_shapes_count -i;
-         
-        moving_shapes[2 * i + 1].start.x = 90;
-        moving_shapes[2 * i + 1].start.y = 99 -i;
-    }    
+        list_add(field->shapes, p2);
+    }
 }
 
 void display(void)
@@ -85,8 +85,7 @@ void display(void)
         int i;
         for (i = 0; i < moving_shapes_count * 2; i++) {
             glColor3f(0.0, 1.0, 0.0);
-            rectangle_t r = {{moving_shapes[i].start.x, moving_shapes[i].start.y}, {1, 1}};
-            draw_rectangle(r);
+            draw_rectangle(*moving_shapes[i].shape);
         }
     }
     
@@ -103,12 +102,12 @@ void display(void)
 void animate() {
     int i;
     for (i = 0; i < moving_shapes_count * 2; i++) {
-        if (point_equals(moving_shapes[i].start, moving_shapes[i].end)) {
+        if (point_equals(moving_shapes[i].shape->point, moving_shapes[i].end)) {
             continue;
         }
-        list_t *path = get_path(field, moving_shapes[i].start, moving_shapes[i].end);
+        list_t *path = get_path(field, moving_shapes[i].shape->point, moving_shapes[i].end);
         if (path == NULL) {
-            printf("empty path\n");
+/*            printf("empty path\n");*/
             continue;
 /*            ERROR("No path found!\n");
             exit(1);
@@ -117,8 +116,8 @@ void animate() {
         
         point_t point = *((point_t *)path->last->current);
         
-        moving_shapes[i].start.x = point.x;
-        moving_shapes[i].start.y = point.y;
+        moving_shapes[i].shape->point.x = point.x;
+        moving_shapes[i].shape->point.y = point.y;
                 
         list_free(path, TRUE);
     }
