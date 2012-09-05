@@ -89,7 +89,7 @@ int path_node_G(struct path_node_t *node) {
     return path_node_G_vs(node, node->parent); 
 }
 
-struct path_node_t *new_path_node_init(struct path_node_t *parent, point_t point,point_t to) {
+struct path_node_t *new_path_node_init(struct path_node_t *parent, point_t point, point_t to) {
     struct path_node_t *node = new_path_node(parent, point, 0, 0, 0);
     node->H = path_node_H(node, to);
     node->G = path_node_G(node);
@@ -137,21 +137,19 @@ list_t *get_path(field_t *field, point_t from, point_t to) {
 /*            printf("adjacent=%d,%d\n", point.x, point.y);*/
             // I do not consider the end point to be occupied, so I can move towards it
             if (field_contains(field, point) && (point_equals(point, to) || !field_is_occupied(field, point))) {
-                struct path_node_t *node = new_path_node(min_node, point, 0, 0, 0);
-                node->H = path_node_H(node, to);
-                node->G = path_node_G(node);
-                node->F = path_node_F(node);
+                struct path_node_t *node = new_path_node_init(min_node, point, to);
                 if (!list_contains(closed, node)) {
                     if (!list_contains(open, node)) {
                         list_add(open, node);
                     } else {
-                        /* TODO */
-/*                        int gToMin = minNode.G(node);
-                        if (gToMin < node.G()) {
-                            node.setParent(minNode);
-                            // recalculate G, F
+                        int g_to_min = path_node_G_vs(min_node, node);
+                        if (g_to_min < node->G) {
+                            printf("optimized path\n");
+                            node->parent = min_node;
+/*                            node->H = path_node_H(node, to);*/
+                            node->G = path_node_G(node);
+                            node->F = path_node_F(node);
                         }
-*/
                         free(node);
                     }
                 } else {

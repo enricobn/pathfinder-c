@@ -3,19 +3,19 @@ all : path_example.bin list_test.bin field_test.bin move_example.bin
 
 move_example.bin : move_example.o astar_pathfinder.o list.o field.o
 	@echo 'Building $@'
-	cc -g -lglut -lGLU $^ -o $@
+	cc -lglut -lGLU $^ -o $@
 
 path_example.bin : path_example.o astar_pathfinder.o list.o field.o
 	@echo 'Building $@'
-	cc -g -lglut -lGLU $^ -o $@
+	cc -lglut -lGLU $^ -o $@
 
 field_test.bin : field_test.o list.o field.o 
 	@echo 'Building $@'
-	cc -g $^ -o $@
+	cc $^ -o $@
 
 list_test.bin : list_test.o list.o 
 	@echo 'Building $@'
-	cc -g $^ -o $@
+	cc $^ -o $@
 
 %.o : %.c 
 	@echo 'Compiling $<'
