@@ -12,7 +12,7 @@
 #define WIDTH 100
 #define HEIGHT 100
 
-void draw_rectangle(rectangle_t rectangle) {
+void rectangle_draw(rectangle_t rectangle) {
     glRectf((float)rectangle.point.x, (float)rectangle.point.y, (float)(rectangle.point.x + rectangle.dimension.width), 
         (float)(rectangle.point.y + rectangle.dimension.height));
 }
@@ -28,13 +28,34 @@ int moving_shapes_count = 50;
 
 moving_shape_t *moving_shapes = NULL;
 
-rectangle_t *rectangle_new(int x, int y, int width, int height) {
+rectangle_t *rectangle_new(int x, int y, int width, int height, void (*draw)()) {
     rectangle_t *r = (rectangle_t *) malloc(sizeof(rectangle_t));
     r->point.x = x;
     r->point.y = y;
     r->dimension.width = width;
     r->dimension.height = height;
+    r->draw = draw;
     return r;
+}
+
+void white_draw(rectangle_t rectangle) {
+    glColor3f(1.0, 1.0, 1.0);
+    rectangle_draw(rectangle);
+}
+
+void blue_draw(rectangle_t rectangle) {
+    glColor3f(0.0, 0.0, 1.0);
+    rectangle_draw(rectangle);
+}
+
+void red_draw(rectangle_t rectangle) {
+    glColor3f(1.0, 0.0, 0.0);
+    rectangle_draw(rectangle);
+}
+
+void green_draw(rectangle_t rectangle) {
+    glColor3f(0.0, 1.0, 0.0);
+    rectangle_draw(rectangle);
 }
 
 void field_init() {
@@ -44,25 +65,25 @@ void field_init() {
     field->dimension.width = WIDTH;
     field->dimension.height = HEIGHT;    
 
-    list_add(field->shapes, rectangle_new(10, 10, 10, 10));
+    list_add(field->shapes, rectangle_new(10, 10, 10, 10, white_draw));
 
-    list_add(field->shapes, rectangle_new(40, 20, 20, 20));
+    list_add(field->shapes, rectangle_new(40, 20, 20, 20, white_draw));
     
-    list_add(field->shapes, rectangle_new(40, 60, 20, 20));
+    list_add(field->shapes, rectangle_new(40, 60, 20, 20, white_draw));
 
-    list_add(field->shapes, rectangle_new(75, 75, 10, 10));
+    list_add(field->shapes, rectangle_new(75, 75, 10, 10, white_draw));
     
     moving_shapes = (moving_shape_t *) malloc(sizeof(moving_shape_t) * moving_shapes_count * 2);    
     
     int i;
     for (i = 0; i < moving_shapes_count; i++) {
-        rectangle_t *p1 = rectangle_new(0, moving_shapes_count -i, 1, 1);
+        rectangle_t *p1 = rectangle_new(0, moving_shapes_count -i, 1, 1, red_draw);
         moving_shapes[2 * i].shape = p1;
         moving_shapes[2 * i].end.x = 90;
         moving_shapes[2 * i].end.y = 99 -i;
         list_add(field->shapes, p1);
 
-        rectangle_t *p2 = rectangle_new(99, 99 -i, 1, 1);
+        rectangle_t *p2 = rectangle_new(99, 99 -i, 1, 1, blue_draw);
         moving_shapes[2 * i +1].shape = p2;
         moving_shapes[2 * i + 1].end.x = 0;
         moving_shapes[2 * i + 1].end.y = moving_shapes_count -i;
@@ -78,14 +99,14 @@ void display(void)
     rectangle_t *r;
     LIST_FOREACH_START(field->shapes, r)
        glColor3f (1.0, 1.0, 1.0);
-       draw_rectangle(*r);
+       r->draw(*r);
     LIST_FOREACH_END(field->shapes)
 
     {
         int i;
         for (i = 0; i < moving_shapes_count * 2; i++) {
             glColor3f(0.0, 1.0, 0.0);
-            draw_rectangle(*moving_shapes[i].shape);
+            moving_shapes[i].shape->draw(*moving_shapes[i].shape);
         }
     }
     

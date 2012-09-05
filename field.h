@@ -13,9 +13,12 @@ typedef struct {
     int height;
 } dimension_t;
 
+/*typedef void (*rectangle_draw_f) (rectangle_t rectangle);*/
+
 typedef struct {
     point_t point;
     dimension_t dimension;
+    void (*draw)();
 } rectangle_t;
 
 typedef struct {
