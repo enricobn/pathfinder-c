@@ -24,41 +24,38 @@ struct path_node_t *new_path_node(struct path_node_t *parent, point_t point, int
     return result;
 }
 
-struct path_node_t *new_path_node_init(struct path_node_t *parent, point_t point,point_t to) {
-    struct path_node_t *node = new_path_node(parent, point, 0, 0, 0);
-    node->H = path_node_H(node, to);
-    node->G = path_node_G(node);
-    node->F = path_node_F(node);
-    return node;
-}
+point_t *adjacents_tmp = NULL;
 
 point_t *get_adjacents(point_t point) {
-    point_t *adjacents = (point_t *)malloc(sizeof(point_t) * 9);
-    adjacents[0].x = point.x + 1;
-    adjacents[0].y = point.y;
+    if (adjacents_tmp == NULL) {
+        adjacents_tmp = (point_t *)malloc(sizeof(point_t) * 9);
+    }
+/*    point_t *adjacents = (point_t *)malloc(sizeof(point_t) * 9); */
+    adjacents_tmp[0].x = point.x + 1;
+    adjacents_tmp[0].y = point.y;
 
-    adjacents[1].x = point.x + 1;
-    adjacents[1].y = point.y + 1;
+    adjacents_tmp[1].x = point.x + 1;
+    adjacents_tmp[1].y = point.y + 1;
 
-    adjacents[2].x = point.x;
-    adjacents[2].y = point.y + 1;
+    adjacents_tmp[2].x = point.x;
+    adjacents_tmp[2].y = point.y + 1;
 
-    adjacents[3].x = point.x - 1;
-    adjacents[3].y = point.y + 1;
+    adjacents_tmp[3].x = point.x - 1;
+    adjacents_tmp[3].y = point.y + 1;
 
-    adjacents[4].x = point.x - 1;
-    adjacents[4].y = point.y;
+    adjacents_tmp[4].x = point.x - 1;
+    adjacents_tmp[4].y = point.y;
 
-    adjacents[5].x = point.x - 1;
-    adjacents[5].y = point.y - 1;
+    adjacents_tmp[5].x = point.x - 1;
+    adjacents_tmp[5].y = point.y - 1;
 
-    adjacents[6].x = point.x;
-    adjacents[6].y = point.y - 1;
+    adjacents_tmp[6].x = point.x;
+    adjacents_tmp[6].y = point.y - 1;
 
-    adjacents[7].x = point.x + 1;
-    adjacents[7].y = point.y - 1;
+    adjacents_tmp[7].x = point.x + 1;
+    adjacents_tmp[7].y = point.y - 1;
     
-    return adjacents;
+    return adjacents_tmp;
 }
 
 int point_equals(point_t a, point_t b) {
@@ -95,6 +92,14 @@ int path_node_G_vs(struct path_node_t *node, struct path_node_t *vs) {
 
 int path_node_G(struct path_node_t *node) {
     return path_node_G_vs(node, node->parent); 
+}
+
+struct path_node_t *new_path_node_init(struct path_node_t *parent, point_t point,point_t to) {
+    struct path_node_t *node = new_path_node(parent, point, 0, 0, 0);
+    node->H = path_node_H(node, to);
+    node->G = path_node_G(node);
+    node->F = path_node_F(node);
+    return node;
 }
 
 list_t *get_path(field_t *field, point_t from, point_t to) {
@@ -156,8 +161,8 @@ list_t *get_path(field_t *field, point_t from, point_t to) {
         }
         
         list_remove(open, min_node);
+        free(min_node);
         list_add(closed, min_node);
-            
     }
     
     list_t *result = list_new(NULL);
