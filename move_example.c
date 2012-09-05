@@ -1,5 +1,5 @@
 /*
- * path_example.c
+ * move_example.c
  * This is a path finding example using ASearch
  */
 #include <GL/glut.h>
@@ -35,7 +35,7 @@ rectangle_t *rectangle_new(int x, int y, int width, int height) {
     return r;
 }
 
-void init_field() {
+void field_init() {
     field = (field_t *) malloc(sizeof(field_t));
 
     field->shapes = list_new(NULL);
@@ -89,7 +89,8 @@ void display(void)
                draw_rectangle(r);
                //glRectf((float)point->x, (float)point->y, (float)point->x + 1, (float)point->y +1);
             LIST_FOREACH_END(path)
-            list_free(path, FALSE);
+            
+            list_free(path, TRUE);
         }
     }
     
@@ -121,7 +122,7 @@ void init (void)
  */
 int main(int argc, char** argv)
 {
-    init_field();
+    field_init();
     glutInit(&argc, argv);
     glutInitDisplayMode (GLUT_SINGLE | GLUT_RGB);
     glutInitWindowSize (800, 600); 

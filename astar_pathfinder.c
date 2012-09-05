@@ -28,9 +28,8 @@ point_t *adjacents_tmp = NULL;
 
 point_t *get_adjacents(point_t point) {
     if (adjacents_tmp == NULL) {
-        adjacents_tmp = (point_t *)malloc(sizeof(point_t) * 9);
+        adjacents_tmp = (point_t *)malloc(sizeof(point_t) * 8);
     }
-/*    point_t *adjacents = (point_t *)malloc(sizeof(point_t) * 9); */
     adjacents_tmp[0].x = point.x + 1;
     adjacents_tmp[0].y = point.y;
 
@@ -150,12 +149,16 @@ list_t *get_path(field_t *field, point_t from, point_t to) {
                     if (!list_contains(open, node)) {
                         list_add(open, node);
                     } else {
+                        /* TODO */
 /*                        int gToMin = minNode.G(node);
                         if (gToMin < node.G()) {
                             node.setParent(minNode);
                         }
 */
+                        free(node);
                     }
+                } else {
+                    free(node);
                 }
 /*
             } else {
@@ -173,13 +176,16 @@ list_t *get_path(field_t *field, point_t from, point_t to) {
     while (target_node->parent != NULL) {
         /* the path can contains occupied points. Normally it can be only the end point */ 
         if (!field_is_occupied(field, target_node->point)) {
-            list_add(result, &target_node->point);
+            /* I copy it so I can completely free open and closed lists */
+            point_t *point = (point_t *)malloc(sizeof(point_t));
+            memcpy(point, &target_node->point, sizeof(point_t));
+            list_add(result, point);
         }
         target_node = target_node->parent;
     }
     
-    list_free(open, FALSE);
-    list_free(closed, FALSE);
+    list_free(open, TRUE);
+    list_free(closed, TRUE);
     
     return result;
 }

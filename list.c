@@ -80,10 +80,12 @@ int list_remove(list_t *list, const void *element) {
                 struct cursor *tmp = list->first;
                 list->first = list->first->next;
                 free(tmp);
+                tmp = NULL;
             } else {
                 struct cursor *tmp = cur;
                 prev->next = cur->next;
                 free(tmp);
+                tmp = NULL;
             }
             return TRUE;
         }
