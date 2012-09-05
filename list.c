@@ -55,14 +55,21 @@ void list_clear(list_t *list) {
     list->first = NULL;
     list->last = NULL;
     while (cur != NULL) {
-/*        if (cur->current != NULL) {
+/*
+        if (cur->current != NULL) {
             free(cur->current);
         }
-        */
+*/
         struct cursor *tmp = cur;
         cur = cur->next;
         free(tmp);
     }
+}
+
+void list_free(list_t *list) {
+    list_clear(list);
+    free(list);
+    list = NULL;
 }
 
 int list_remove(list_t *list, const void *element) {

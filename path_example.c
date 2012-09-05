@@ -68,6 +68,10 @@ void display(void)
        draw_rectangle(r);
        //glRectf((float)point->x, (float)point->y, (float)point->x + 1, (float)point->y +1);
     LIST_FOREACH_END(path)
+    
+    list_free(shapes);
+    
+    list_free(path);
 
 /*
    glColor3f (1.0, 1.0, 1.0);

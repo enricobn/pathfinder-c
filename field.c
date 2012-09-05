@@ -2,14 +2,17 @@
 
 int field_is_occupied(field_t *field, point_t point) {
     rectangle_t *element;
+    int result = FALSE;
     LIST_FOREACH_START(field->shapes, element)
         if (point.x >= element->point.x && point.y >= element->point.y
                 && point.x <= (element->point.x + element->dimension.width) 
                 && point.y <= (element->point.y + element->dimension.height)) {
-             return TRUE;
+             /* I cannot exit from a FOREACH without LIST_FOREACH_END, so I cannot return TRUE here! */
+             result = TRUE;
+             break;
          }
     LIST_FOREACH_END(field->shapes)
-    return FALSE;
+    return result;
 }
 
 int field_contains(field_t *field, point_t point) {

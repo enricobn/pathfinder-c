@@ -15,7 +15,7 @@ list_test.bin : list_test.o list.o
 
 %.o : %.c 
 	@echo 'Compiling $<'
-	cc -g -std=c99 -pedantic -save-temps -Wall -c $<
+	cc -g -O0 -std=c99 -pedantic -save-temps -Wall -c $<
 
 .PHONY : clean
 
