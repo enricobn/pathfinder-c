@@ -182,14 +182,41 @@ struct path_node_t *get_path_internal(field_t *field, point_t from, point_t to) 
     return target_node;
 }
 
-list_t *get_next_to_path(field_t *field, point_t from, point_t to) {
-    return NULL;
+point_t *get_next_to_path(field_t *field, point_t from, point_t to) {
+    struct path_node_t *target_node = get_path_internal(field, from, to);
+
+    if (target_node == NULL) {
+        list_free(open, TRUE);
+        list_free(closed, TRUE);
+
+        return NULL;
+    }
+    while (target_node->parent != NULL) {
+        /* the path can contains occupied points. Normally it can be only the end point */ 
+        if (!field_is_occupied(field, target_node->point)) {
+            /* I copy it so I can completely free open and closed lists */
+        }
+        target_node = target_node->parent;
+    }
+
+    list_free(open, TRUE);
+    list_free(closed, TRUE);
+
+    /* the path can contains occupied points. Normally it can be only the end point */
+    if (field_is_occupied(field, target_node->point)) {
+        return NULL;
+    }
+
+    return &target_node->point;
 }
 
 list_t *get_path(field_t *field, point_t from, point_t to) {
     struct path_node_t *target_node = get_path_internal(field, from, to);
 
     if (target_node == NULL) {
+        list_free(open, TRUE);
+        list_free(closed, TRUE);
+        
         return NULL;
     }
     list_t *result = list_new(NULL);
