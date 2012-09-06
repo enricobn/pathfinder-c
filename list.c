@@ -22,10 +22,15 @@ list_t *list_new(list_equals equals) {
 
 void list_add(list_t *list, const void *element) {
     struct cursor *new = (struct cursor *) malloc(sizeof(struct cursor));
+    if (new == NULL) {
+        ERROR("Cannot allocate new cursor.");
+        exit(TRUE);
+    }
     new->current = element;
     new->next = NULL;
     if (new == NULL) {
-        ERROR("Error allocating new element.");
+        ERROR("Cannot allocate new element.");
+        exit(TRUE);
     }
     if (list->first == NULL) {
         list->first = new;
