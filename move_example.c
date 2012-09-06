@@ -174,7 +174,7 @@ int main(int argc, char** argv)
     field_init();
     glutInit(&argc, argv);
     glutInitDisplayMode (GLUT_DOUBLE | GLUT_RGB);
-    glutInitWindowSize (800, 600); 
+    glutInitWindowSize (800, 800); 
     glutInitWindowPosition (100, 100);
     glutCreateWindow ("Path example");
     init ();

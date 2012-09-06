@@ -1,3 +1,5 @@
+/* thanks to http://www.policyalmanac.org/games/aStarTutorial.htm */
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -6,7 +8,7 @@
 #include "list.h"
 #include "field.h"
 
-struct path_node_t {
+static struct path_node_t {
     struct path_node_t *parent;
     point_t point;
     int F;
@@ -14,7 +16,7 @@ struct path_node_t {
     int H;
 };
 
-struct path_node_t *new_path_node(struct path_node_t *parent, point_t point, int F, int G, int H) {
+static struct path_node_t *new_path_node(struct path_node_t *parent, point_t point, int F, int G, int H) {
     struct path_node_t *result = NEW_STRUCT_POINTER(path_node_t);
     result->parent = parent;
     result->point = point;
@@ -24,9 +26,9 @@ struct path_node_t *new_path_node(struct path_node_t *parent, point_t point, int
     return result;
 }
 
-point_t *adjacents_tmp = NULL;
+static point_t *adjacents_tmp = NULL;
 
-point_t *get_adjacents(point_t point) {
+static point_t *get_adjacents(point_t point) {
     if (adjacents_tmp == NULL) {
         adjacents_tmp = (point_t *)malloc(sizeof(point_t) * 8);
     }
@@ -57,22 +59,22 @@ point_t *get_adjacents(point_t point) {
     return adjacents_tmp;
 }
 
-int path_node_equals(const void *e1, const void *e2) {
+static int path_node_equals(const void *e1, const void *e2) {
     struct path_node_t *n1 = (struct path_node_t *)e1;
     struct path_node_t *n2 = (struct path_node_t *)e2;
     return point_equals(n1->point, n2->point);
 } 
 
 
-int path_node_H(struct path_node_t *node, point_t to) {
+static int path_node_H(struct path_node_t *node, point_t to) {
     return (abs(to.x - node->point.x) + abs(to.y - node->point.y)) * 10;
 }
 
-int path_node_F(struct path_node_t *node) {
+static int path_node_F(struct path_node_t *node) {
     return node->H + node->G;
 }
 
-int path_node_G_vs(struct path_node_t *node, struct path_node_t *vs) {
+static int path_node_G_vs(struct path_node_t *node, struct path_node_t *vs) {
     if (vs == NULL) {
         return 0;
     }
@@ -85,11 +87,11 @@ int path_node_G_vs(struct path_node_t *node, struct path_node_t *vs) {
     return g;
 }
 
-int path_node_G(struct path_node_t *node) {
+static int path_node_G(struct path_node_t *node) {
     return path_node_G_vs(node, node->parent); 
 }
 
-struct path_node_t *new_path_node_init(struct path_node_t *parent, point_t point, point_t to) {
+static struct path_node_t *new_path_node_init(struct path_node_t *parent, point_t point, point_t to) {
     struct path_node_t *node = new_path_node(parent, point, 0, 0, 0);
     node->H = path_node_H(node, to);
     node->G = path_node_G(node);
@@ -107,7 +109,7 @@ list_t *get_path(field_t *field, point_t from, point_t to) {
     struct path_node_t *target_node = NULL;
     
     while (TRUE) {
-/*        printf("%d\n", list_size(open));*/
+/*        printf("%d\n", list_size(open));  */
         if (open->first == NULL) {
             return NULL;
         }
