@@ -126,8 +126,8 @@ void animate() {
         if (point_equals(moving_shapes[i].shape->point, moving_shapes[i].end)) {
             continue;
         }
-        list_t *path = get_path(field, moving_shapes[i].shape->point, moving_shapes[i].end);
-        if (path == NULL) {
+        point_t *point = get_next_to_path(field, moving_shapes[i].shape->point, moving_shapes[i].end);
+        if (point == NULL) {
 /*            printf("empty path\n");*/
             continue;
 /*            ERROR("No path found!\n");
@@ -135,12 +135,8 @@ void animate() {
 */
         }
         
-        point_t point = *((point_t *)path->last->current);
-        
-        moving_shapes[i].shape->point.x = point.x;
-        moving_shapes[i].shape->point.y = point.y;
-                
-        list_free(path, TRUE);
+        moving_shapes[i].shape->point.x = point->x;
+        moving_shapes[i].shape->point.y = point->y;
     }
 
 
