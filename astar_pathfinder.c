@@ -203,9 +203,12 @@ point_t *get_next_to_path(field_t *field, point_t from, point_t to) {
     }
 
     /* I copy it so I can completely free open and closed lists */
-    point_t *result = (point_t *)malloc(sizeof(point_t));
-    memcpy(result, point, sizeof(point_t));
-
+    point_t *result;
+    if (point != NULL) {
+        result = (point_t *)malloc(sizeof(point_t));
+        memcpy(result, point, sizeof(point_t));
+    }
+    
     list_free(open, TRUE);
     list_free(closed, TRUE);
 
