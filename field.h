@@ -19,7 +19,7 @@ typedef struct {
     point_t point;
     dimension_t dimension;
     void (*draw)();
-} rectangle_t;
+} shape_t;
 
 typedef struct {
     list_t *shapes;

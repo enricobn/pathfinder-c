@@ -18,10 +18,10 @@ int main(int argc, char** argv) {
     
     /* test is_occupied */ 
     
-    rectangle_t r1 = {{0, 0}, {10, 10}};
+    shape_t r1 = {{0, 0}, {10, 10}};
     list_add(field.shapes, &r1);
 
-    rectangle_t r2 = {{20, 20}, {10, 10}};
+    shape_t r2 = {{20, 20}, {10, 10}};
     list_add(field.shapes, &r2);
     
     point_t p4 = {5, 5};

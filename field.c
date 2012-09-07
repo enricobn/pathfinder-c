@@ -2,7 +2,7 @@
 #include "field.h"
 
 int field_is_occupied(field_t *field, point_t point) {
-    rectangle_t *element;
+    shape_t *element;
     int result = FALSE;
     LIST_FOREACH_START(field->shapes, element)
         if (point.x >= element->point.x && point.y >= element->point.y

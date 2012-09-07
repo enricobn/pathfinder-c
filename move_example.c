@@ -12,13 +12,13 @@
 #define WIDTH 100
 #define HEIGHT 100
 
-void rectangle_draw(rectangle_t rectangle) {
+void rectangle_draw(shape_t rectangle) {
     glRectf((float)rectangle.point.x, (float)rectangle.point.y, (float)(rectangle.point.x + rectangle.dimension.width), 
         (float)(rectangle.point.y + rectangle.dimension.height));
 }
 
 typedef struct {
-    rectangle_t *shape;
+    shape_t *shape;
     point_t end;
 } moving_shape_t;
 
@@ -28,8 +28,8 @@ int moving_shapes_count = 50;
 
 moving_shape_t *moving_shapes = NULL;
 
-rectangle_t *rectangle_new(int x, int y, int width, int height, void (*draw)()) {
-    rectangle_t *r = (rectangle_t *) malloc(sizeof(rectangle_t));
+shape_t *rectangle_new(int x, int y, int width, int height, void (*draw)()) {
+    shape_t *r = (shape_t *) malloc(sizeof(shape_t));
     r->point.x = x;
     r->point.y = y;
     r->dimension.width = width;
@@ -38,22 +38,22 @@ rectangle_t *rectangle_new(int x, int y, int width, int height, void (*draw)()) 
     return r;
 }
 
-void white_draw(rectangle_t rectangle) {
+void white_draw(shape_t rectangle) {
     glColor3f(1.0, 1.0, 1.0);
     rectangle_draw(rectangle);
 }
 
-void blue_draw(rectangle_t rectangle) {
+void blue_draw(shape_t rectangle) {
     glColor3f(0.0, 0.0, 1.0);
     rectangle_draw(rectangle);
 }
 
-void red_draw(rectangle_t rectangle) {
+void red_draw(shape_t rectangle) {
     glColor3f(1.0, 0.0, 0.0);
     rectangle_draw(rectangle);
 }
 
-void green_draw(rectangle_t rectangle) {
+void green_draw(shape_t rectangle) {
     glColor3f(0.0, 1.0, 0.0);
     rectangle_draw(rectangle);
 }
@@ -77,13 +77,13 @@ void field_init() {
     
     int i;
     for (i = 0; i < moving_shapes_count; i++) {
-        rectangle_t *p1 = rectangle_new(0, moving_shapes_count -i, 1, 1, red_draw);
+        shape_t *p1 = rectangle_new(0, moving_shapes_count -i, 1, 1, red_draw);
         moving_shapes[2 * i].shape = p1;
         moving_shapes[2 * i].end.x = 90;
         moving_shapes[2 * i].end.y = 99 -i;
         list_add(field->shapes, p1);
 
-        rectangle_t *p2 = rectangle_new(99, 99 -i, 1, 1, blue_draw);
+        shape_t *p2 = rectangle_new(99, 99 -i, 1, 1, blue_draw);
         moving_shapes[2 * i +1].shape = p2;
         moving_shapes[2 * i + 1].end.x = 0;
         moving_shapes[2 * i + 1].end.y = moving_shapes_count -i;
@@ -96,7 +96,7 @@ void display(void)
 /* clear all pixels  */
     glClear (GL_COLOR_BUFFER_BIT);
 
-    rectangle_t *r;
+    shape_t *r;
     LIST_FOREACH_START(field->shapes, r)
        glColor3f (1.0, 1.0, 1.0);
        r->draw(*r);
