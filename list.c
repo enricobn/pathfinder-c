@@ -81,16 +81,23 @@ int list_remove(list_t *list, const void *element) {
     for (cur = list->first; cur != NULL; cur = cur->next) {
         if ((list->equals == NULL && element == cur->current) 
                 || list->equals(element, cur->current)) {
+            int is_last = (cur == list->last);
             if (cur == list->first) {
                 struct cursor *tmp = list->first;
                 list->first = list->first->next;
                 free(tmp);
                 tmp = NULL;
-            } else {
+                if (is_last) {
+                	list->last = list->first;
+                }
+           } else {
                 struct cursor *tmp = cur;
                 prev->next = cur->next;
                 free(tmp);
                 tmp = NULL;
+                if (is_last) {
+                	list->last = prev;
+                }
             }
             return TRUE;
         }
