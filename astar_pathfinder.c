@@ -162,8 +162,12 @@ struct path_node_t *get_path_internal(field_t *field, point_t from, point_t to) 
 /*                            node->H = path_node_H(node, to);*/
                             node->G = path_node_G(node);
                             node->F = path_node_F(node);
+                            // TODO I must free the removed element
+                            list_remove(open, node);
+                            list_add(open, node);
+                        } else {
+                            free(node);
                         }
-                        free(node);
                     }
                 } else {
                     free(node);
