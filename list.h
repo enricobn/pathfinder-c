@@ -6,7 +6,7 @@
 #define LIST_H_
 
 struct cursor {
-    void *current;
+    void const *current;
     struct cursor *next;
 };
 
