@@ -3,8 +3,8 @@ SAVE-TEMPS =
 #PROFILER = -pg
 PROFILER =
 CC = cc
-#DEBUG = -g
-DEBUG =
+DEBUG = -g
+#DEBUG =
 CFLAGS = -Wall -c $(DEBUG) -std=c99 -O3 -pedantic $(SAVE-TEMPS) $(PROFILER)
 LFLAGS = -Wall $(DEBUG) $(PROFILER)
 GL = -lglut -lGLU

@@ -182,13 +182,18 @@ struct path_node_t *get_path_internal(field_t *field, point_t from, point_t to) 
     return target_node;
 }
 
+void free_open_closed() {
+	list_free(open, TRUE);
+    open = NULL;
+    list_free(closed, TRUE);
+    closed = NULL;
+}
+
 point_t *get_next_to_path(field_t *field, point_t from, point_t to) {
     struct path_node_t *target_node = get_path_internal(field, from, to);
 
     if (target_node == NULL) {
-        list_free(open, TRUE);
-        list_free(closed, TRUE);
-
+        free_open_closed();
         return NULL;
     }
 
@@ -209,9 +214,7 @@ point_t *get_next_to_path(field_t *field, point_t from, point_t to) {
         memcpy(result, point, sizeof(point_t));
     }
     
-    list_free(open, TRUE);
-    list_free(closed, TRUE);
-
+    free_open_closed();
     return result;
 }
 
@@ -219,9 +222,7 @@ list_t *get_path(field_t *field, point_t from, point_t to) {
     struct path_node_t *target_node = get_path_internal(field, from, to);
 
     if (target_node == NULL) {
-        list_free(open, TRUE);
-        list_free(closed, TRUE);
-        
+        free_open_closed();
         return NULL;
     }
     list_t *result = list_new(NULL);
@@ -236,10 +237,7 @@ list_t *get_path(field_t *field, point_t from, point_t to) {
         }
         target_node = target_node->parent;
     }
-    
-    list_free(open, TRUE);
-    list_free(closed, TRUE);
-    
+    free_open_closed();    
     return result;
 
 }

@@ -71,6 +71,7 @@ void list_clear(list_t *list, int deep) {
 
 void list_free(list_t *list, int deep) {
     list_clear(list, deep);
+    free(list->actual_cursor);
     free(list);
     list = NULL;
 }
