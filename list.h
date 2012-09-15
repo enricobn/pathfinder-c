@@ -6,7 +6,7 @@
 #define LIST_H_
 
 struct cursor {
-    void const *current;
+    void *current;
     struct cursor *next;
 };
 
@@ -23,7 +23,7 @@ typedef struct {
 
 list_t *list_new(const list_equals equals);
 
-void list_add(list_t *list, const void *element);
+void list_add(list_t *list, void *element);
 
 int list_contains(list_t *list, const void *element);
 

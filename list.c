@@ -20,7 +20,7 @@ list_t *list_new(list_equals equals) {
     return new;
 }
 
-void list_add(list_t *list, const void *element) {
+void list_add(list_t *list, void *element) {
     struct cursor *new = (struct cursor *) malloc(sizeof(struct cursor));
     if (new == NULL) {
         ERROR("Cannot allocate new cursor.");
