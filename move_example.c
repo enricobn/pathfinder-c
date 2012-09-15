@@ -83,7 +83,7 @@ void field_init() {
         moving_shapes[2 * i].end.y = 99 -i;
         list_add(field->shapes, p1);
 
-        shape_t *p2 = rectangle_new(99, 99 -i, 1, 1, blue_draw);
+        shape_t *p2 = rectangle_new(90, 99 -i, 1, 1, blue_draw);
         moving_shapes[2 * i +1].shape = p2;
         moving_shapes[2 * i + 1].end.x = 0;
         moving_shapes[2 * i + 1].end.y = moving_shapes_count -i;
