@@ -18,8 +18,8 @@ int field_is_occupied(field_t *field, point_t point) {
 
 int field_contains(field_t *field, point_t point) {
     return (point.x >= 0 && point.y >= 0
-                && point.x <= field->dimension.width 
-                && point.y <= field->dimension.height);
+                && point.x < field->dimension.width
+                && point.y < field->dimension.height);
 }
 
 int point_equals(point_t a, point_t b) {

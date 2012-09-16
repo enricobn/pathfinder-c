@@ -86,7 +86,7 @@ static int path_node_G_vs(struct path_node_t *node, struct path_node_t *vs) {
     if (vs == NULL) {
         return 0;
     }
-    int g = node->G;
+    int g = vs->G;
     if (node->point.x == vs->point.x || node->point.y == vs->point.y) {
         g += 10;
     } else {
