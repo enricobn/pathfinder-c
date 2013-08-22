@@ -74,6 +74,11 @@ static int path_node_equals(const void *e1, const void *e2) {
     return point_equals(n1->point, n2->point);
 }
 
+static int path_node_hash (const void *e) {
+	struct path_node_t *n = (struct path_node_t *)e;
+	return n->point.x * 1000 + n->point.y;
+}
+
 static int path_node_H(struct path_node_t *node, point_t to) {
     return (abs(to.x - node->point.x) + abs(to.y - node->point.y)) * 10;
 }
@@ -111,8 +116,8 @@ static list_t *open;
 static list_t *closed;
 
 struct path_node_t *get_path_internal(field_t *field, point_t from, point_t to) {
-    open = list_new(path_node_equals);
-    closed = list_new(path_node_equals);
+    open = list_new(path_node_equals, path_node_hash);
+    closed = list_new(path_node_equals, path_node_hash);
     
     struct path_node_t *from_node = new_path_node_init(NULL, from, to); 
     list_add(open, from_node);
@@ -229,7 +234,7 @@ list_t *get_path(field_t *field, point_t from, point_t to) {
         free_open_closed();
         return NULL;
     }
-    list_t *result = list_new(NULL);
+    list_t *result = list_new(NULL, NULL);
     
     while (target_node->parent != NULL) {
         /* the path can contains occupied points. Tipically it can be only the end point */ 

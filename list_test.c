@@ -6,8 +6,12 @@ int equals(const void *e1, const void *e2) {
     return *((int *)e1) == *((int *)e2);
 }
 
+int hash(const void *e) {
+    return *((int *)e) * 1000;
+}
+
 int main(int argc, char** argv) {
-    list_t *l = list_new(equals);
+    list_t *l = list_new(equals, hash);
     assert(l->first == NULL);
     assert(l->last == NULL);    
     
@@ -53,6 +57,8 @@ int main(int argc, char** argv) {
     assert(list_contains(l, &b));
     assert(list_contains(l, &c));
     assert(!list_contains(l, &d));
+
+    assert(list_contains(l, &a));
 
     assert(list_remove(l, &a));
     assert(!list_contains(l, &a));

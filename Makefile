@@ -6,30 +6,30 @@ CC = cc
 DEBUG = -g
 #DEBUG =
 CFLAGS = -Wall -c $(DEBUG) -std=c99 -O3 -pedantic $(SAVE-TEMPS) $(PROFILER)
-LFLAGS = -Wall $(DEBUG) $(PROFILER)
+LFLAGS = -Wall $(DEBUG) $(PROFILER) 
 GL = -lglut -lGLU
 
 all : path_example.bin list_test.bin field_test.bin move_example.bin
 
 move_example.bin : move_example.o astar_pathfinder.o list.o field.o
 	@echo 'Building $@'
-	$(CC) $(LFLAGS) $(GL) -o $@ $^
+	$(CC) $(LFLAGS) $(GL) -o $@ $^ /usr/local/lib/libJudy.a
 
 path_example.bin : path_example.o astar_pathfinder.o list.o field.o
 	@echo 'Building $@'
-	$(CC) $(LFLAGS) $(GL) -o $@ $^
+	$(CC) $(LFLAGS) $(GL) -o $@ $^ /usr/local/lib/libJudy.a
 
 field_test.bin : field_test.o list.o field.o 
 	@echo 'Building $@'
-	$(CC) $(LFLAGS) -o $@ $^
+	$(CC) $(LFLAGS) -o $@ $^ /usr/local/lib/libJudy.a
 
 list_test.bin : list_test.o list.o 
 	@echo 'Building $@'
-	$(CC) $(LFLAGS) -o $@ $^
+	$(CC) $(LFLAGS) -o $@ $^ /usr/local/lib/libJudy.a
 
 %.o : %.c 
 	@echo 'Compiling $<'
-	$(CC) $(CFLAGS)$(DEBUG) $<
+	$(CC) $(CFLAGS) $(DEBUG) $<
 
 .PHONY : clean
 

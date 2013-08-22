@@ -2,7 +2,7 @@
 #include "field.h"
 
 int main(int argc, char** argv) {
-    list_t *shapes = list_new(NULL);
+    list_t *shapes = list_new(NULL, NULL);
     field_t field = {shapes, {100, 100}};
 
     /* test contains */ 

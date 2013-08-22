@@ -1,6 +1,8 @@
 /*
  * move_example.c
  * This is a path finding example using ASearch
+ *
+ * 22-08-2013 13.070s
  */
 #include <unistd.h>
 #include <GL/glut.h>
@@ -61,7 +63,7 @@ void green_draw(shape_t rectangle) {
 void field_init() {
     field = (field_t *) malloc(sizeof(field_t));
 
-    field->shapes = list_new(NULL);
+    field->shapes = list_new(NULL, NULL);
     field->dimension.width = WIDTH;
     field->dimension.height = HEIGHT;    
 

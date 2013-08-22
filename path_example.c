@@ -21,7 +21,7 @@ void display(void)
 /* clear all pixels  */
     glClear (GL_COLOR_BUFFER_BIT);
 
-    list_t *shapes = list_new(NULL);
+    list_t *shapes = list_new(NULL, NULL);
     
     field_t field = {shapes, {WIDTH, HEIGHT}};
     

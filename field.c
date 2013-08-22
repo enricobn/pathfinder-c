@@ -25,3 +25,8 @@ int field_contains(field_t *field, point_t point) {
 int point_equals(point_t a, point_t b) {
     return a.x == b.x && a.y == b.y;
 }
+
+//int point_hash (const void *e) {
+//	point_t *point = (point_t*) e;
+//	return point->x * 10000 + point->y;
+//}

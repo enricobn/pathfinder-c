@@ -1,6 +1,7 @@
 #include <errno.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <Judy.h>
 
 #ifndef LIST_H_
 #define LIST_H_
@@ -12,16 +13,20 @@ struct cursor {
 
 typedef int (*list_equals) (const void *e1, const void *e2);
 
+typedef int (*list_hash) (const void *e);
+
 typedef struct {
     struct cursor *first;
     struct cursor *last;
     struct cursor **actual_cursor;
     int actual_cursor_number;
     list_equals equals;
+    list_hash hash;
+    Pvoid_t JArray;
 } list_t;
 
 
-list_t *list_new(const list_equals equals);
+list_t *list_new(const list_equals equals, const list_hash hash);
 
 void list_add(list_t *list, void *element);
 
