@@ -7,18 +7,18 @@ DEBUG = -g
 #DEBUG =
 CFLAGS = -Wall -c $(DEBUG) -std=c99 -O3 -pedantic $(SAVE-TEMPS) $(PROFILER)
 LFLAGS = -Wall $(DEBUG) $(PROFILER) 
-GL = -lglut -lGLU
-LIB = /usr/local/lib/libJudy.a
+GL = -lglut -lGLU -lGL
+LIB = -lJudy
 
 all : path_example.bin list_test.bin field_test.bin move_example.bin
 
 move_example.bin : move_example.o astar_pathfinder.o list.o field.o
 	@echo 'Building $@'
-	$(CC) $(LFLAGS) $(GL) -o $@ $^ $(LIB)
+	$(CC) $(LFLAGS) -o $@ $^ $(LIB) $(GL)
 
 path_example.bin : path_example.o astar_pathfinder.o list.o field.o
 	@echo 'Building $@'
-	$(CC) $(LFLAGS) $(GL) -o $@ $^ $(LIB)
+	$(CC) $(LFLAGS) -o $@ $^ $(LIB) $(GL)
 
 field_test.bin : field_test.o list.o field.o 
 	@echo 'Building $@'
